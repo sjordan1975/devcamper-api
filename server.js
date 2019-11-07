@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import morgan from 'morgan';
 
 // Routes
 import { bootcamps } from './routes/bootcamps';
@@ -11,6 +12,11 @@ dotenv.config({ path: './config/config.env' });
 const PORT = process.env.PORT || 5000;
 
 const app = express();
+
+// Development logging middleware
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 
 // Mount routes
 app.use('/api/v1/bootcamps', bootcamps);
