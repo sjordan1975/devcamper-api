@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-export const BootcampSchema = new mongoose.Schema({
+const BootcampSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'Please add a name'],
@@ -97,3 +97,5 @@ export const BootcampSchema = new mongoose.Schema({
     default: Date.now
   }
 });
+
+export default mongoose.model('Bootcamp', BootcampSchema);

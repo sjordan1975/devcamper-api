@@ -40,7 +40,11 @@ export const deleteBootcamp = (req, res, next) => {
 // @desc Create a bootcamp
 // @route POST /api/v1/bootcamps
 // @access Private
-export const createBootcamp = (req, res, next) => {
-  console.log(req.body);
-  res.status(200).json({ success: true, data: { msg: 'Create new bootcamp' } });
+export const createBootcamp = async (req, res, next) => {
+  try {
+    const bootcamp = await Bootcamp.create(req.body);
+    res.status(201).json({ success: true, data: bootcamp });
+  } catch (error) {
+    res.status(400).json({ success: false });
+  }
 };
