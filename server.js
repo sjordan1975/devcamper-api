@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
+import { errorHandler } from './middleware/error';
 import { connectDB } from './config/db';
 
 // Load env vars
@@ -27,6 +28,8 @@ if (process.env.NODE_ENV === 'development') {
 
 // Mount routes
 app.use('/api/v1/bootcamps', bootcamps);
+
+app.use(errorHandler);
 
 const server = app.listen(PORT, () => {
   console.log(`Server running in ${process.env.NODE_ENV} on port ${PORT}`);
