@@ -17,6 +17,9 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
 
+// Body parse middleware
+app.use(express.json());
+
 // Development logging middleware
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
