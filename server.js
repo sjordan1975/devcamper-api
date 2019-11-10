@@ -1,11 +1,8 @@
 import express from 'express';
-import dotenv from 'dotenv';
+import _ from './config/env'; // Load env vars
 import morgan from 'morgan';
 import { errorHandler } from './middleware/error';
 import { connectDB } from './config/db';
-
-// Load env vars
-dotenv.config({ path: './config/config.env' });
 
 // DB
 connectDB();
