@@ -29,7 +29,7 @@ export const getCourses = asyncHandler(async (req, res, next) => {
     conditions.bootcamp = req.params.bootcampId;
   }
 
-  query = Course.find(conditions);
+  query = Course.find(conditions).populate('bootcamp');
 
   if (req.query.select) {
     const fields = req.query.select.split(',').join(' ');
