@@ -131,6 +131,12 @@ BootcampSchema.pre('save', async function(next) {
   next();
 });
 
+// Cascade delete courses
+BootcampSchema.pre('remove', async function(next) {
+  await this.model('Course').deleteMany({ bootcamp: this._id });
+  next();
+});
+
 // Create the virtuals
 BootcampSchema.virtual('courses', {
   ref: 'Course',
