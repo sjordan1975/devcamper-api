@@ -1,4 +1,5 @@
 import Course from '../models/Course';
+import Bootcamp from '../models/Bootcamp';
 import ErrorResponse from '../utils/errorResponse';
 import { asyncHandler } from '../middleware/async';
 
@@ -83,7 +84,10 @@ export const getCourses = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/courses/:id
 // @access Public
 export const getCourse = asyncHandler(async (req, res, next) => {
-  const course = await Course.findById(req.params.id);
+  const course = await Course.findById(req.params.id).populate({
+    path: 'bootcamp',
+    select: 'name description'
+  });
 
   if (!course) {
     return next(
@@ -111,10 +115,14 @@ export const updateCourse = asyncHandler(async (req, res, next) => {
 // @route DELETE /api/v1/courses/:id
 // @access Private
 export const deleteCourse = asyncHandler(async (req, res, next) => {
-  const course = await Course.findByIdAndDelete(req.params.id);
+  const course = await Course.findById(req.params.id);
+
   if (!course) {
     new ErrorResponse(`Course not found with id ${req.params.id}`, 404);
   }
+
+  await course.remove();
+
   res.status(200).json({ success: true, data: {} });
 });
 
@@ -128,9 +136,16 @@ export const deleteCourses = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Create a course
-// @route POST /api/v1/courses
+// @route POST /api/v1/bootcamp/:bootcampId/courses
 // @access Private
 export const createCourse = asyncHandler(async (req, res, next) => {
+  req.body.bootcamp = req.params.bootcampId;
+
+  const bootcamp = await Bootcamp.findById(req.params.bootcampId);
+  if (!bootcamp) {
+    new ErrorResponse(`Course not found with id ${req.params.bootcampId}`, 404);
+  }
+
   const course = await Course.create(req.body);
   res.status(201).json({ success: true, data: course });
 });
