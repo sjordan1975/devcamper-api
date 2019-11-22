@@ -8,76 +8,17 @@ import { asyncHandler } from '../middleware/async';
 // @route GET /api/v1/bootcamp/:bootcampId/courses
 // @access Public
 export const getCourses = asyncHandler(async (req, res, next) => {
-  // Copy req.query
-  const reqQuery = { ...req.query };
-
-  // Fields to exclude
-  const removeFields = ['select', 'sort', 'page', 'limit'];
-
-  // Loop over removeFields and delete from reqQuery
-  removeFields.forEach(param => delete reqQuery[param]);
-
-  // Create query string
-  let queryStr = JSON.stringify(reqQuery);
-
-  // Create operators
-  queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
-
-  // Find resource
-  let query;
-  const conditions = JSON.parse(queryStr);
   if (req.params.bootcampId) {
-    conditions.bootcamp = req.params.bootcampId;
-  }
+    const courses = await Course.find({ bootcamp: req.params.bootcampId });
 
-  query = Course.find(conditions).populate('bootcamp');
-
-  if (req.query.select) {
-    const fields = req.query.select.split(',').join(' ');
-    query = query.select(fields);
-  }
-
-  if (req.query.sort) {
-    const sortBy = req.query.select.split(',').join(' ');
-    query = query.sort(sortBy);
+    return res.status(200).json({
+      success: true,
+      count: courses.length,
+      data: courses
+    });
   } else {
-    query = query.sort('-createdAt');
+    res.status(200).json(res.advancedResults);
   }
-
-  // Pagination
-  const page = parseInt(req.query.page, 10) || 1;
-  const limit = parseInt(req.query.limit, 10) || 1;
-  const startIndex = (page - 1) * limit;
-  const endIndex = page * limit;
-  const total = await Course.countDocuments();
-
-  query = query.skip(startIndex).limit(limit);
-
-  // Paginaion result
-  const pagination = { total };
-
-  if (startIndex > 0) {
-    pagination.prev = {
-      page: page - 1,
-      limit
-    };
-  }
-
-  if (endIndex < total) {
-    pagination.next = {
-      page: page + 1,
-      limit
-    };
-  }
-
-  // Executing query
-  const courses = await query;
-  res.status(200).json({
-    success: true,
-    count: courses.length,
-    pagination,
-    data: courses
-  });
 });
 
 // @desc Get single course

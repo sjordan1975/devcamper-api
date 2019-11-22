@@ -10,6 +10,9 @@ import {
   uploadBootcampPhoto
 } from '../controllers/bootcamps';
 
+import Bootcamp from '../models/Bootcamp';
+import { advancedResults } from '../middleware/advancedResults';
+
 // Include other resource routers
 import { courses as courseRouter } from './courses';
 
@@ -23,7 +26,7 @@ router.route('/:id/photo').put(uploadBootcampPhoto);
 
 router
   .route('/')
-  .get(getBootcamps)
+  .get(advancedResults(Bootcamp, 'courses'), getBootcamps)
   .post(createBootcamp)
   .delete(deleteBootcamps); //@TODO This is a temporary convenience
 
