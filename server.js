@@ -12,6 +12,7 @@ connectDB();
 // Routes
 import { bootcamps } from './routes/bootcamps';
 import { courses } from './routes/courses';
+import { auth } from './routes/auth';
 
 // constants and variables
 const PORT = process.env.PORT || 5000;
@@ -35,6 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Mount routes
 app.use('/api/v1/bootcamps', bootcamps);
 app.use('/api/v1/courses', courses);
+app.use('/api/v1/auth', auth);
 
 app.use(errorHandler);
 
