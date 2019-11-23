@@ -10,9 +10,10 @@ import { connectDB } from './config/db';
 connectDB();
 
 // Routes
-import { bootcamps } from './routes/bootcamps';
-import { courses } from './routes/courses';
-import { auth } from './routes/auth';
+// import { bootcamps } from './routes/bootcamps';
+// import { courses } from './routes/courses';
+// import { auth } from './routes/auth';
+import { bootcamps, courses, auth } from './routes/';
 
 // constants and variables
 const PORT = process.env.PORT || 5000;
