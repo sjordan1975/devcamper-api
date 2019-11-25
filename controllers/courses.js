@@ -42,13 +42,21 @@ export const getCourse = asyncHandler(async (req, res, next) => {
 // @route PUT /api/v1/courses/:id
 // @access Private
 export const updateCourse = asyncHandler(async (req, res, next) => {
-  const course = await Course.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true
-  });
+  let course = await Course.findById(req.params.id);
+
   if (!course) {
     new ErrorResponse(`Course not found with id ${req.params.id}`, 404);
   }
+
+  if (course.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(new ErrorResponse(`Unauthorized`, 401));
+  }
+
+  course = await Course.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true
+  });
+
   res.status(200).json({ success: true, data: course });
 });
 
@@ -60,6 +68,10 @@ export const deleteCourse = asyncHandler(async (req, res, next) => {
 
   if (!course) {
     new ErrorResponse(`Course not found with id ${req.params.id}`, 404);
+  }
+
+  if (course.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(new ErrorResponse(`Unauthorized`, 401));
   }
 
   await course.remove();
@@ -82,9 +94,17 @@ export const deleteCourses = asyncHandler(async (req, res, next) => {
 export const createCourse = asyncHandler(async (req, res, next) => {
   req.body.bootcamp = req.params.bootcampId;
 
+  // Add user to req.body
+  req.body.user = req.user.id;
+
   const bootcamp = await Bootcamp.findById(req.params.bootcampId);
+
   if (!bootcamp) {
     new ErrorResponse(`Course not found with id ${req.params.bootcampId}`, 404);
+  }
+
+  if (bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(new ErrorResponse(`Unauthorized`, 401));
   }
 
   const course = await Course.create(req.body);
