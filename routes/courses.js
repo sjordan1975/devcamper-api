@@ -13,6 +13,9 @@ import { advancedResults } from '../middleware/advancedResults';
 
 const router = express.Router({ mergeParams: true });
 
+// Protect middleware
+import { protect, authorize } from '../middleware/auth';
+
 router
   .route('/')
   .get(
@@ -22,13 +25,13 @@ router
     }),
     getCourses
   )
-  .post(createCourse)
+  .post(protect, authorize('publisher', 'admin'), createCourse)
   .delete(deleteCourses); //@TODO This is a temporary convenience
 
 router
   .route('/:id')
   .get(getCourse)
-  .put(updateCourse)
-  .delete(deleteCourse);
+  .put(protect, authorize('publisher', 'admin'), updateCourse)
+  .delete(protect, authorize('publisher', 'admin'), deleteCourse);
 
 export { router as courses };

@@ -3,6 +3,7 @@ import path from 'path';
 import _ from './config/env'; // Load env vars
 import morgan from 'morgan';
 import fileupload from 'express-fileupload';
+import cookieParser from 'cookie-parser';
 import { errorHandler } from './middleware/error';
 import { connectDB } from './config/db';
 
@@ -10,9 +11,6 @@ import { connectDB } from './config/db';
 connectDB();
 
 // Routes
-// import { bootcamps } from './routes/bootcamps';
-// import { courses } from './routes/courses';
-// import { auth } from './routes/auth';
 import { bootcamps, courses, auth } from './routes/';
 
 // constants and variables
@@ -30,6 +28,9 @@ if (process.env.NODE_ENV === 'development') {
 
 // File uploader
 app.use(fileupload());
+
+// Cookie parser
+app.use(cookieParser());
 
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
