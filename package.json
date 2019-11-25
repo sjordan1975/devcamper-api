@@ -6,7 +6,7 @@
   "scripts": {
     "start": "NODE_ENV=production node server-compiled",
     "dev": "nodemon --exec babel-node server",
-    "build": "babel server.js --out-file server-compiled.js"
+    "build": "babel ./ --out-dir build --ignore node_modules,build"
   },
   "keywords": [],
   "author": "Salim Jordan",
