@@ -1,7 +1,5 @@
 import User from '../models/User';
-import ErrorResponse from '../utils/errorResponse';
 import { asyncHandler } from '../middleware/async';
-import crypto from 'crypto';
 
 // @desc Get all users
 // @route GET /api/v1/users/
@@ -14,7 +12,7 @@ export const getUsers = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/users/:id
 // @access Private/Admin
 export const getUser = asyncHandler(async (req, res, next) => {
-  const user = User.findById(res.params.id);
+  const user = await User.findById(req.params.id);
 
   res.status(200).json({
     sucess: true,
