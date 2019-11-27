@@ -11,15 +11,15 @@ import {
 } from '../controllers/bootcamps';
 
 import Bootcamp from '../models/Bootcamp';
-import { advancedResults } from '../middleware/advancedResults';
 
 // Include other resource routers
 import { courses as courseRouter } from './courses';
 
 const router = express.Router();
 
-// Protect middleware
+// Middleware
 import { protect, authorize } from '../middleware/auth';
+import { advancedResults } from '../middleware/advancedResults';
 
 // Re-route to other resources
 router.use('/:bootcampId/courses', courseRouter);

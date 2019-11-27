@@ -1,5 +1,4 @@
 import Bootcamp from '../models/Bootcamp';
-import User from '../models/User';
 import ErrorResponse from '../utils/errorResponse';
 import geocoder from '../utils/geocoder';
 import { asyncHandler } from '../middleware/async';

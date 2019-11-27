@@ -9,12 +9,12 @@ import {
 } from '../controllers/courses';
 
 import Course from '../models/Course';
-import { advancedResults } from '../middleware/advancedResults';
 
 const router = express.Router({ mergeParams: true });
 
-// Protect middleware
+// Middleware
 import { protect, authorize } from '../middleware/auth';
+import { advancedResults } from '../middleware/advancedResults';
 
 router
   .route('/')
