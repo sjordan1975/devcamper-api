@@ -35,16 +35,14 @@ export const protect = asyncHandler(async (req, res, next) => {
 });
 
 // Grant access to priviledged roles
-export const authorize = (...roles) => {
-  return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      return next(
-        new ErrorResponse(
-          `Unauthorized user ${req.user.id} with role ${req.user.role}`,
-          403
-        )
-      );
-    }
-    next();
-  };
+export const authorize = (...roles) => (req, res, next) => {
+  if (!roles.includes(req.user.role)) {
+    return next(
+      new ErrorResponse(
+        `Unauthorized user ${req.user.id} with role ${req.user.role}`,
+        403
+      )
+    );
+  }
+  return next();
 };
