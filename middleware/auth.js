@@ -38,7 +38,12 @@ export const protect = asyncHandler(async (req, res, next) => {
 export const authorize = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
-      return next(new ErrorResponse('Unauthorized', 403));
+      return next(
+        new ErrorResponse(
+          `Unauthorized user ${req.user.id} with role ${req.user.role}`,
+          403
+        )
+      );
     }
     next();
   };

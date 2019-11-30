@@ -89,7 +89,7 @@ export const deleteCourses = asyncHandler(async (req, res, next) => {
 });
 
 // @desc Create a course
-// @route POST /api/v1/bootcamp/:bootcampId/courses
+// @route POST /api/v1/bootcamps/:bootcampId/courses
 // @access Private
 export const createCourse = asyncHandler(async (req, res, next) => {
   req.body.bootcamp = req.params.bootcampId;
@@ -100,7 +100,12 @@ export const createCourse = asyncHandler(async (req, res, next) => {
   const bootcamp = await Bootcamp.findById(req.params.bootcampId);
 
   if (!bootcamp) {
-    new ErrorResponse(`Course not found with id ${req.params.bootcampId}`, 404);
+    return next(
+      new ErrorResponse(
+        `Bootcamp not found with id ${req.params.bootcampId}`,
+        404
+      )
+    );
   }
 
   if (bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
