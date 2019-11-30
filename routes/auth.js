@@ -2,6 +2,7 @@ import express from 'express';
 import {
   registerUser,
   loginUser,
+  logoutUser,
   getMe,
   forgotPassword,
   resetPassword,
@@ -17,6 +18,7 @@ import { protect } from '../middleware/auth';
 // Public routes
 router.post('/register', registerUser);
 router.post('/login', loginUser);
+router.get('/logout', logoutUser);
 router.post('/forgotpassword', forgotPassword);
 router.put('/resetpassword/:resettoken', resetPassword);
 
