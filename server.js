@@ -9,6 +9,7 @@ import helmet from 'helmet';
 import xss from 'xss-clean';
 import rateLimit from 'express-rate-limit';
 import hpp from 'hpp';
+import cors from 'cors';
 import { errorHandler } from './middleware/error';
 import { connectDB } from './config/db';
 
@@ -48,6 +49,9 @@ app.use(helmet());
 
 // Use xss-clean for to combat cross site scripting
 app.use(xss());
+
+// Use cors
+app.use(cors());
 
 // Use rate-limit to limit rate of requests
 const limiter = rateLimit({
