@@ -7,6 +7,8 @@ import cookieParser from 'cookie-parser';
 import mongoSanitize from 'express-mongo-sanitize';
 import helmet from 'helmet';
 import xss from 'xss-clean';
+import rateLimit from 'express-rate-limit';
+import hpp from 'hpp';
 import { errorHandler } from './middleware/error';
 import { connectDB } from './config/db';
 
@@ -46,6 +48,17 @@ app.use(helmet());
 
 // Use xss-clean for to combat cross site scripting
 app.use(xss());
+
+// Use rate-limit to limit rate of requests
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  max: 100
+});
+
+app.use(limiter);
+
+// Use hpp to prevent param pollution
+app.use(hpp());
 
 // Mount routes
 app.use('/api/v1/bootcamps', bootcamps);
