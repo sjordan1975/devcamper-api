@@ -4,6 +4,7 @@ import _ from './config/env'; // Load env vars
 import morgan from 'morgan';
 import fileupload from 'express-fileupload';
 import cookieParser from 'cookie-parser';
+import mongoSanitize from 'express-mongo-sanitize';
 import { errorHandler } from './middleware/error';
 import { connectDB } from './config/db';
 
@@ -34,6 +35,9 @@ app.use(cookieParser());
 
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Sanitize data
+app.use(mongoSanitize());
 
 // Mount routes
 app.use('/api/v1/bootcamps', bootcamps);
