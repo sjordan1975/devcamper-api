@@ -1,2 +1,3 @@
 import dotenv from 'dotenv';
-dotenv.config({ silent: true, path: './config/config.env' });
+import path from 'path';
+dotenv.config({ silent: true, path: path.join(__dirname, 'config.env') });
